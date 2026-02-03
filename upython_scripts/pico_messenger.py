@@ -32,7 +32,7 @@ while True:
         sys.stdout.write(out_msg)  # main.py will send this to computer
         last_us = now_us  # update last time stamp
     # Receive data (RX)
-    is_waiting = pico_messenger.poll(0)  # check data in USB, sample rate=50Hz
+    is_waiting = pico_messenger.poll(0)  # check data in USB
     if is_waiting:
         in_msg = sys.stdin.readline().strip()  # take out whitespaces
         targ_vels = in_msg.split(",")
