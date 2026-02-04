@@ -12,13 +12,13 @@ usb_messenger = serial.Serial(
     SERIAL_PORT, BAUD_RATE, timeout=0.01
 )  # set error recovery duration half the pico talker's period
 print(f"Connected to {SERIAL_PORT}")
-sleep(2)  # Wait briefly for the connection to stabilize
 # Variables
 tlvs = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7]
 targ_lin_vels = tlvs + list(reversed(tlvs))
 msg_id = 0
-last_stamp = time()
+sleep(3)  # Wait briefly for the connection to stabilize
 print("Starting communication... Press Ctrl+C to stop.")
+last_stamp = time()
 
 # LOOP
 try:
