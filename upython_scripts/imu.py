@@ -14,9 +14,9 @@ class MPU6050:
 
     def read_data(self):
         """
-        MPU6050 uses 2 bytes to represent values of an entity
-        Acc_X, Acc_Y, Acc_Z, Temp, Gyro_X, Gyro_Y, Gyro_Z are contiguous registers.
-        To read'em all, grab 14 bytes starting at the first Acc_X register: 0x3B.
+        MPU6050 uses 2 bytes to represent values of an entity.
+        Acc_X, Acc_Y, Acc_Z, Temp, Gyro_X, Gyro_Y, Gyro_Z are stored in contiguous registers.
+        To read'em all, grab 14 bytes starting at the ACCEL_XOUT_H register: 0x3B.
         """
         words = self.i2c.readfrom_mem(
             self.i2c_addr,
@@ -41,35 +41,6 @@ class MPU6050:
             "ang_vel_z": ang_vel_z,
         }
 
-    # def get_values(self):
-    #     # Raw readings for 6 axes
-    #     # AcX, AcY, AcZ, Temp, GyX, GyY, GyZ are contiguous registers
-    #     # For simplicity in this assignment, we read them individually
-    #     # or you can read block 14 bytes for speed (advanced).
-    #
-    #     # Accelerometer
-    #     ac_x = self.read_data(0x3B)
-    #     ac_y = self.read_data(0x3D)
-    #     ac_z = self.read_data(0x3F)
-    #
-    #     # Gyroscope
-    #     gy_x = self.read_data(0x43)
-    #     gy_y = self.read_data(0x45)
-    #     gy_z = self.read_data(0x47)
-    #
-    #     # Scaling (Default ranges: Accel +/- 2g, Gyro +/- 250 deg/s)
-    #     # 16384.0 is the scale factor for 2g
-    #     # 131.0 is the scale factor for 250 deg/s
-    #     return {
-    #         "AcX": ac_x / 16384.0,
-    #         "AcY": ac_y / 16384.0,
-    #         "AcZ": ac_z / 16384.0,
-    #         "GyX": gy_x / 131.0,
-    #         "GyY": gy_y / 131.0,
-    #         "GyZ": gy_z / 131.0,
-    #     }
-    #
-
 
 if __name__ == "__main__":
     from utime import ticks_ms, sleep_ms
@@ -84,18 +55,6 @@ if __name__ == "__main__":
     # LOOP
     while True:
         stamp = ticks_ms()
-        # data = sensor.get_values()
-        #
-        # # Extract values for cleaner code
-        # ax = data["AcX"]
-        # ay = data["AcY"]
-        # az = data["AcZ"]
-        # gx = data["GyX"]
-        # gy = data["GyY"]
-        # gz = data["GyZ"]
-        #
-        # Structure: [Header]: Ax, Ay, Az, Gx, Gy, Gz
-        # msg = f"[Pico, {stamp}]: {ax:.2f}, {ay:.2f}, {az:.2f}, {gx:.2f}, {gy:.2f}, {gz:.2f}"
         data = sensor.read_data()
 
         print(f"[Pico, {stamp}]:")
