@@ -3,20 +3,23 @@ from utime import time, ticks_us, ticks_diff
 import select
 from machine import freq
 from diff_drive_controller import DiffDriveController
-from ultrasonic_sensor import UltrasonicSensor
+
+# from sonar_sensor import HCSR04
+# from imu import MPU6050
 
 # SETUP
 # Overclock
 freq(240_000_000)  # Pico2 original: 150_000_000
 # Instantiate robot
-dist_sensor = UltrasonicSensor(echo_id=21, trig_id=22)
+# distance_sensor = HCSR04(echo_id=21, trig_id=22)
+# motion_sensor = MPU6050(scl_id=9, sda_id=8, i2c_addr=0x68)
 mobile_base = DiffDriveController(
     left_wheel_ids=((16, 17, 18), (19, 20)),
     right_wheel_ids=((15, 14, 13), (12, 11)),
 )
 mobile_base.awaken()
-pico_messenger = select.poll()  # create a poll object 
-pico_messenger.register(sys.stdin, select.POLLIN) # peek at serial port input
+pico_messenger = select.poll()  # create a poll object
+pico_messenger.register(sys.stdin, select.POLLIN)  # peek at serial port input
 # Constants
 tx_period_us = 16_667  # 60Hz
 # Variables
@@ -30,9 +33,8 @@ while True:
     now_us = ticks_us()
     if ticks_diff(now_us, last_us) >= tx_period_us:
         meas_lin_vel, meas_ang_vel = mobile_base.get_vels()
-        meas_dist = dist_sensor.distance
-        out_msg = f"{meas_lin_vel},{meas_ang_vel},{meas_dist}\n"
-        sys.stdout.write(out_msg)  # main.py will send this to computer
+        out_msg = f"{meas_lin_vel:.4f},{meas_ang_vel:.4f}"
+        print(out_msg)  # main.py will send this to computer
         last_us = now_us  # update last time stamp
     # Receive data (RX)
     is_waiting = pico_messenger.poll(0)  # check data in USB
