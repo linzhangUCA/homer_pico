@@ -26,23 +26,20 @@ class MPU6050:
         To read'em all, grab 14 bytes starting at the ACCEL_XOUT_H register: 0x3B.
         """
 
-        def process_raw(data, id, scale):
+        def process_raw(data, scale):
             """
             Args:
                 data: a list contains n words(2 bytes) of sensor data
-                id: 0 to n-1
                 scale: a constant coefficient scaling raw data.
-                       accelerometer: 16384 * 9.80665 per g
-                       gyro: 131 per deg/s
-                TODO: use radians
+                       accelerometer: 16384 per g
+                       gyro: 131 per deg/s, TODO: use radians
             Returns:
                 value: human readible value in m/s^2 or deg/s
             """
-
-            if data[id] > 32767:
-                value = (data[id] - 65535) / scale
+            if data > 32768:
+                value = (data - 65535) / scale
             else:
-                value = data[0] / scale
+                value = data / scale
 
             return value
 
@@ -54,35 +51,38 @@ class MPU6050:
         # Preprocess bytes, split 2 bytes as a group
         data = [words[i] << 8 | words[i + 1] for i in range(0, len(words), 2)]
         # Calculate human readibles
-        self.lin_acc_x = process_raw(data, 0, 16384 * 9.80665)
-        self.lin_acc_y = process_raw(data, 1, 16384 * 9.80665)
-        self.lin_acc_z = process_raw(data, 2, 16384 * 9.80665)
-        self.ang_vel_x = process_raw(data, 4, 131)
-        self.ang_vel_y = process_raw(data, 5, 131)
-        self.ang_vel_z = process_raw(data, 6, 131)
+        self.lin_acc_x = process_raw(data[0], 16384) * 9.80665
+        self.lin_acc_y = process_raw(data[1], 16384) * 9.80665
+        self.lin_acc_z = process_raw(data[2], 16384) * 9.80665
+        self.ang_vel_x = process_raw(data[4], 131)
+        self.ang_vel_y = process_raw(data[5], 131)
+        self.ang_vel_z = process_raw(data[6], 131)
+
+        return {
+            "xdd": self.lin_acc_x,
+            "ydd": self.lin_acc_y,
+            "zdd": self.lin_acc_z,
+            "omg_x": self.ang_vel_x,
+            "omg_y": self.ang_vel_y,
+            "omg_z": self.ang_vel_z,
+        }
 
 
 if __name__ == "__main__":
     from utime import ticks_ms, sleep_ms
 
     # SETUP
-    try:
-        sensor = MPU6050()
-        print("IMU Connected!")
-    except OSError:
-        print("IMU Not Found - Check Wiring!")
+    sensor = MPU6050()
 
     # LOOP
     while True:
         stamp = ticks_ms()
-        sensor.read_data()
-        # Log
-        print(f"[Pico, {stamp}]:")
-        print("---")
+        data = sensor.read_data()
+        # Logging, enable plotter
         print(
-            f"acc_x={sensor.lin_acc_x} m/s^2, acc_y={sensor.lin_acc_y} m/s^2, acc_z={sensor.lin_acc_z} m/s^2"
+            f"acc(m/s/s): x={data['xdd']:.4f}, acc_y={data['ydd']:.4f}, acc_z={data['zdd']:.4f}"
         )
-        print(
-            f"angv_x={sensor.ang_vel_x} deg/s, angv_y={sensor.ang_vel_y} deg/s, angv_z={sensor.ang_vel_z} deg/s"
-        )
-        sleep_ms(50)  # 20Hz
+        # print(
+        #     f"angv(deg/s): x={data['omg_x']:.4f} deg/s, angv_y={data['omg_y']:.4f} deg/s, angv_z={data['omg_z']:.4f} deg/s"
+        # )
+        sleep_ms(100)  # 10Hz
