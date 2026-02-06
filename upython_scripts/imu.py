@@ -72,7 +72,7 @@ if __name__ == "__main__":
     from utime import ticks_ms, sleep_ms
 
     # SETUP
-    sensor = MPU6050()
+    sensor = MPU6050(scl_id=9, sda_id=8, i2c_addr=0x68)
 
     # LOOP
     while True:

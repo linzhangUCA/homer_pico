@@ -26,7 +26,7 @@ try:
         # Transmit data (TX)
         current_stamp = time()
         if (current_stamp - last_stamp) >= 0.5:  # 2Hz TX
-            msg = f"{targ_lin_vels[msg_id%16]},0.0\n"
+            msg = f"{targ_lin_vels[msg_id % 16]},0.0\n"
             # Encode string to bytes and send
             usb_messenger.write(msg.encode("utf-8"))
             msg_id += 1
