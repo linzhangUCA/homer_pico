@@ -29,10 +29,18 @@ while True:
     if uart_msngr.any():
         # Read all available bytes
         in_data = uart_msngr.readline()
-        in_msg = in_data.decode("utf-8").strip()  # strip whitespace
-        targ_vels = in_msg.split(",")  # get a list
-        # print(targ_vels)  # debug
-        if len(targ_vels) == 2:
-            targ_lin_vel = float(targ_vels[0])
-            targ_ang_vel = float(targ_vels[1])
-            mobile_base.set_vels(targ_lin_vel, targ_ang_vel)
+        try:
+            in_msg = in_data.decode("utf-8").strip()  # strip whitespace
+            targ_vels = in_msg.split(",")  # get a list
+            # print(targ_vels)  # debug
+            if len(targ_vels) == 2:
+                targ_lin_vel = float(targ_vels[0])
+                targ_ang_vel = float(targ_vels[1])
+                mobile_base.set_vels(targ_lin_vel, targ_ang_vel)
+                print(targ_lin_vel, targ_ang_vel)  # debug
+            else:
+                print(f"Malformed packet: {targ_vels}")
+        except (UnicodeError, ValueError):
+            # UnicodeError: Serial noise corrupted the bytes
+            # ValueError: The string wasn't a valid number (e.g., "1.2,abc")
+            print("Skipping corrupted or invalid data frame")
