@@ -21,7 +21,7 @@ targ_lin_vels = (
     tlvs_pos + list(reversed(tlvs_pos)) + tlvs_neg + list(reversed(tlvs_neg))
 )
 msg_id = 0
-sleep(3)  # Wait briefly for the connection to stabilize
+sleep(2)  # Wait briefly for the connection to stabilize
 print("Starting communication... Press Ctrl+C to stop.")
 last_stamp = time()
 
@@ -31,8 +31,6 @@ try:
         # Transmit data (TX)
         current_stamp = time()
         if (current_stamp - last_stamp) >= 0.2:  # 5Hz TX
-            # msg = f"{targ_lin_vels[msg_id % 20]:.2f},0.00\n"
-            # ser_messenger.write(msg.encode("utf-8"))  # encode string to bytes and send
             out_packet = struct.pack(
                 "<Bff", 0xAA, targ_lin_vels[msg_id % 20], 0.00
             )  # 4 bytes total
