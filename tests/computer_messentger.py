@@ -36,7 +36,7 @@ try:
             out_packet = struct.pack(
                 "<Bff", 0xAA, targ_lin_vels[msg_id % 20], 0.00
             )  # 4 bytes total
-            print(out_packet)  # debug
+            # print(out_packet)  # debug
             ser_messenger.write(out_packet)
             msg_id += 1
             last_stamp = current_stamp

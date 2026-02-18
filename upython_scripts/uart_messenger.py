@@ -23,7 +23,7 @@ while True:
     now_us = ticks_us()
     if ticks_diff(now_us, last_us) >= tx_period_us:
         meas_lin_vel, meas_ang_vel = mobile_base.get_vels()
-        out_msg = f"{meas_lin_vel:.4f},{meas_ang_vel:.4f}\n".encode("utf-8")
+        out_msg = f"{meas_lin_vel:.2f},{meas_ang_vel:.2f}\n".encode("utf-8")
         uart_msngr.write(out_msg)  # main.py will send this to computer
         last_us = now_us  # update last time stamp
     # Receive data (RX)
@@ -52,6 +52,7 @@ while True:
                 try:
                     targ_lin_vel, targ_ang_vel = struct.unpack("<ff", in_packet)
                     print(f"Received: {targ_lin_vel}, {targ_ang_vel}")
+                    mobile_base.set_vels(targ_lin_vel, targ_ang_vel)
                 except Exception as e:
                     print("Unpack error!")
             else:
