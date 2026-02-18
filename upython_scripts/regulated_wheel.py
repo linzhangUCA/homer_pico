@@ -43,7 +43,7 @@ class RegulatedWheel(SentientWheel):
                 + self.k_i * self.error_inte
                 + self.k_d * self.error_diff
             )
-            inc_duty = clamp(inc_duty, -0.5, 0.5)
+            inc_duty = clamp(inc_duty, -0.1, 0.1)
             self.duty = self.duty + inc_duty
             if self.duty > 0:
                 if self.duty > 1.0:
