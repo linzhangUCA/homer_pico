@@ -31,7 +31,7 @@ while True:
         in_data = uart_msngr.readline()
         in_msg = in_data.decode("utf-8").strip()  # strip whitespace
         targ_vels = in_msg.split(",")  # get a list
-        print(targ_vels)
+        # print(targ_vels)  # debug
         if len(targ_vels) == 2:
             targ_lin_vel = float(targ_vels[0])
             targ_ang_vel = float(targ_vels[1])
