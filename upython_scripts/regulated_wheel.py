@@ -2,6 +2,10 @@ from sentient_wheel import SentientWheel
 from machine import Timer
 
 
+def clamp(x, min_val, max_val):
+    return max(min_val, min(x, max_val))
+
+
 class RegulatedWheel(SentientWheel):
     def __init__(self, driver_ids: list | tuple, encoder_ids: list | tuple) -> None:
         super().__init__(driver_ids, encoder_ids)
@@ -39,6 +43,7 @@ class RegulatedWheel(SentientWheel):
                 + self.k_i * self.error_inte
                 + self.k_d * self.error_diff
             )
+            inc_duty = clamp(inc_duty, -0.5, 0.5)
             self.duty = self.duty + inc_duty
             if self.duty > 0:
                 if self.duty > 1.0:
