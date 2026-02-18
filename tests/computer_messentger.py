@@ -2,10 +2,11 @@ import serial
 from time import time, sleep
 
 # SETUP
-# Linux example: '/dev/ttyACM0', '/dev/ttyACM1'
+# Linux example: '/dev/ttyACM0', '/dev/ttyACM1', '/dev/ttyAMA0'
 # Mac example: '/dev/cu.usbmodem1413301''
 # Windows example: 'COM3', 'COM4'
-SERIAL_PORT = "/dev/ttyACM0"
+# SERIAL_PORT = "/dev/ttyACM0" # USB
+SERIAL_PORT = "/dev/ttyAMA0"  # UART
 BAUD_RATE = 115200
 # BAUD_RATE = 921600
 usb_messenger = serial.Serial(
