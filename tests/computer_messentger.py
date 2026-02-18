@@ -45,7 +45,7 @@ try:
         if ser_messenger.in_waiting > 0:
             try:
                 # Read line, decode bytes to string, and strip whitespace
-                in_packet = ser_messenger.read()
+                in_packet = ser_messenger.readline()
                 in_msg = in_packet.decode("utf-8").strip()
                 if in_msg:
                     print(f"Computer heard: {in_msg}")
