@@ -1,4 +1,4 @@
-from regulated_wheel import RegulatedWheel
+from drivetrain.regulated_wheel import RegulatedWheel
 
 
 class DiffDriveController:

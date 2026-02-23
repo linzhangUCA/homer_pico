@@ -1,4 +1,4 @@
-from encoded_motor import EncodedMotor
+from drivetrain.encoded_motor import EncodedMotor
 from machine import Pin, Timer
 from math import pi
 

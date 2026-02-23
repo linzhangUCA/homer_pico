@@ -1,4 +1,4 @@
-from base_motor import BaseMotor
+from drivetrain.base_motor import BaseMotor
 from machine import Pin
 
 

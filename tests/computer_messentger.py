@@ -13,8 +13,11 @@ usb_messenger = serial.Serial(
 )  # set error recovery duration half the pico talker's period
 print(f"Connected to {SERIAL_PORT}")
 # Variables
-tlvs = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7]
-targ_lin_vels = tlvs + list(reversed(tlvs))
+tlvs_pos = [0.00, 0.10, 0.20, 0.30, 0.40]
+tlvs_neg = [0.00, -0.10, -0.20, -0.30, -0.40]
+targ_lin_vels = (
+    tlvs_pos + list(reversed(tlvs_pos)) + tlvs_neg + list(reversed(tlvs_neg))
+)
 msg_id = 0
 sleep(3)  # Wait briefly for the connection to stabilize
 print("Starting communication... Press Ctrl+C to stop.")
@@ -25,8 +28,8 @@ try:
     while True:
         # Transmit data (TX)
         current_stamp = time()
-        if (current_stamp - last_stamp) >= 0.25:  # 5Hz TX
-            msg = f"{targ_lin_vels[msg_id % 16]},0.0\n"
+        if (current_stamp - last_stamp) >= 0.5:  # 5Hz TX
+            msg = f"{targ_lin_vels[msg_id % 20]},0.0\n"
             # Encode string to bytes and send
             usb_messenger.write(msg.encode("utf-8"))
             msg_id += 1

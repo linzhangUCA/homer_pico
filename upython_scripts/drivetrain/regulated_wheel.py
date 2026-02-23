@@ -1,4 +1,4 @@
-from sentient_wheel import SentientWheel
+from drivetrain.sentient_wheel import SentientWheel
 from machine import Timer
 
 
@@ -43,7 +43,7 @@ class RegulatedWheel(SentientWheel):
                 + self.k_i * self.error_inte
                 + self.k_d * self.error_diff
             )
-            inc_duty = clamp(inc_duty, -0.01, 0.01)
+            inc_duty = clamp(inc_duty, -0.03, 0.03)
             self.duty = self.duty + inc_duty
             if self.duty > 0:
                 if self.duty > 1.0:
@@ -81,7 +81,7 @@ if __name__ == "__main__":
     regw.awaken()
     for i in range(100):
         if i == 25:  # step up @ t=0.5s
-            regw.set_wheel_velocity(0.9)
+            regw.set_wheel_velocity(0.5)
         elif i == 80:  # step down @ t=1.6s
             regw.set_wheel_velocity(0.0)
         print(
