@@ -6,7 +6,7 @@ import sys
 from utime import time, ticks_us, ticks_diff
 import select
 from machine import freq
-from diff_drive_controller import DiffDriveController
+from drivetrain.diff_drive_controller import DiffDriveController
 
 # from sonar_sensor import HCSR04
 # from imu import MPU6050
