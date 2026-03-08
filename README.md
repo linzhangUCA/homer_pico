@@ -3,6 +3,11 @@
 MicroPython scripts on Raspberry Pi Pico (2) for HomeR's motion control.
 
 ## Usage
+0. Grant user permission to access Pico
+    ```console
+    sudo usermod -aG dialout $USER
+    ```
+    Reboot computer.
 
 1. Download and navigate to the repository.
 
