@@ -3,20 +3,19 @@ Rename this file to main.py
 """
 
 import sys
-from utime import time, ticks_us, ticks_diff
+from utime import ticks_us, ticks_diff
 import select
 from machine import freq
 from drivetrain.diff_drive_controller import DiffDriveController
-
-# from sonar_sensor import HCSR04
-# from imu import MPU6050
+from perception.imu import MPU6050
+# from perception.sonar_sensor import HCSR04
 
 # SETUP
 # Overclock
 freq(240_000_000)  # Pico2 original: 150_000_000
 # Instantiate robot
 # distance_sensor = HCSR04(echo_id=21, trig_id=22)
-# motion_sensor = MPU6050(scl_id=9, sda_id=8, i2c_addr=0x68)
+imu = MPU6050(scl_id=9, sda_id=8, i2c_addr=0x68)
 mobile_base = DiffDriveController(
     left_wheel_ids=((16, 17, 18), (19, 20)),
     right_wheel_ids=((15, 14, 13), (12, 11)),
@@ -37,7 +36,8 @@ while True:
     now_us = ticks_us()
     if ticks_diff(now_us, last_us) >= tx_period_us:
         meas_lin_vel, meas_ang_vel = mobile_base.get_vels()
-        out_msg = f"{meas_lin_vel:.4f},{meas_ang_vel:.4f}"
+        motion_data = imu.read_data()
+        out_msg = f"{meas_lin_vel:.3f},{meas_ang_vel:.3f},{motion_data['acc_x']:.3f},{motion_data['acc_y']:.3f},{motion_data['acc_z']:.3f},{motion_data['omg_x']:.3f},{motion_data['omg_y']:.3f},{motion_data['omg_z']:.3f}"
         print(out_msg)  # main.py will send this to computer
         last_us = now_us  # update last time stamp
     # Receive data (RX)
