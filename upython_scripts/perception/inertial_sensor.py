@@ -3,7 +3,7 @@ from utime import sleep
 
 
 class MPU6050:
-    def __init__(self, scl_id=9, sda_id=8, i2c_addr=0x68, dlpf_level=3):
+    def __init__(self, scl_id=9, sda_id=8, i2c_addr=0x68, dlpf_level=4):
         self.board_led = Pin(25, Pin.OUT)
         self.i2c = I2C(0, scl=Pin(scl_id), sda=Pin(sda_id), freq=400_000)
         self.i2c_addr = i2c_addr
