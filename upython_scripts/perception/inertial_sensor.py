@@ -3,7 +3,7 @@ from utime import sleep
 
 
 class MPU6050:
-    def __init__(self, scl_id=9, sda_id=8, i2c_addr=0x68):
+    def __init__(self, scl_id=9, sda_id=8, i2c_addr=0x68, dlpf_level=3):
         self.board_led = Pin(25, Pin.OUT)
         self.i2c = I2C(0, scl=Pin(scl_id), sda=Pin(sda_id), freq=400_000)
         self.i2c_addr = i2c_addr
@@ -12,7 +12,10 @@ class MPU6050:
             0x6B,  # PWR_MGMT_1 register address
             bytes([0x00]),  # data
         )  # wake up sensor
-        # TODO: DHPF configuration
+        assert 0 <= dlpf_level <= 6
+        self.i2c.writeto_mem(
+            self.i2c_addr, 0x1A, bytes([dlpf_level])
+        )  # filter out high freq noise, level 3 ~= 42 Hz
         # Variables
         self.lin_acc_x = 0.0
         self.lin_acc_y = 0.0
@@ -84,9 +87,9 @@ class MPU6050:
         # print("Calibrating Gyro... DO NOT MOVE ROBOT")  # debug
         for i in range(num_samples):
             data = self.read_data()
-            omg_x_deposite += data['omg_x']
-            omg_y_deposite += data['omg_y']
-            omg_z_deposite += data['omg_z']
+            omg_x_deposite += data["omg_x"]
+            omg_y_deposite += data["omg_y"]
+            omg_z_deposite += data["omg_z"]
             # Small delay to let the sensor refresh
             sleep(0.005)
             if i % 50 == 0:  # debug
