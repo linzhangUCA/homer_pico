@@ -79,10 +79,10 @@ if __name__ == "__main__":
         stamp = ticks_ms()
         data = sensor.read_data()
         # Logging, enable plotter
-        print(
-            f"acc(m/s/s): x={data['acc_x']:.4f}, acc_y={data['acc_y']:.4f}, acc_z={data['acc_z']:.4f}"
-        )
         # print(
-        #     f"angv(deg/s): x={data['omg_x']:.4f} deg/s, angv_y={data['omg_y']:.4f} deg/s, angv_z={data['omg_z']:.4f} deg/s"
+        #     f"acc(m/s/s): x={data['acc_x']:.4f}, acc_y={data['acc_y']:.4f}, acc_z={data['acc_z']:.4f}"
         # )
+        print(
+            f"angv(deg/s): x={data['omg_x']:.4f} deg/s, angv_y={data['omg_y']:.4f} deg/s, angv_z={data['omg_z']:.4f} deg/s"
+        )
         sleep_ms(100)  # 10Hz

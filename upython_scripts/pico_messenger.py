@@ -7,7 +7,7 @@ from utime import ticks_us, ticks_diff
 import select
 from machine import freq
 from drivetrain.diff_drive_controller import DiffDriveController
-from perception.imu import MPU6050
+from perception.inertial_sensor import MPU6050
 # from perception.sonar_sensor import HCSR04
 
 # SETUP
