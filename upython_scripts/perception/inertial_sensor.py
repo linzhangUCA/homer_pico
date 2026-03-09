@@ -4,6 +4,7 @@ from utime import sleep
 
 class MPU6050:
     def __init__(self, scl_id=9, sda_id=8, i2c_addr=0x68):
+        self.board_led = Pin(25, Pin.OUT)
         self.i2c = I2C(0, scl=Pin(scl_id), sda=Pin(sda_id), freq=400_000)
         self.i2c_addr = i2c_addr
         self.i2c.writeto_mem(
@@ -80,7 +81,7 @@ class MPU6050:
         omg_x_deposite = 0.0
         omg_y_deposite = 0.0
         omg_z_deposite = 0.0
-        print("Calibrating Gyro... DO NOT MOVE ROBOT")  # debug
+        # print("Calibrating Gyro... DO NOT MOVE ROBOT")  # debug
         for i in range(num_samples):
             data = self.read_data()
             omg_x_deposite += data['omg_x']
@@ -89,11 +90,11 @@ class MPU6050:
             # Small delay to let the sensor refresh
             sleep(0.005)
             if i % 50 == 0:  # debug
-                print(".", end="")
+                self.board_led.toggle()
         self.gyro_bias_x = omg_x_deposite / num_samples
         self.gyro_bias_y = omg_y_deposite / num_samples
         self.gyro_bias_z = omg_z_deposite / num_samples
-        print(f"Calibration Done. Gyro biases x={self.gyro_bias_x}, y={self.gyro_bias_y}, z={self.gyro_bias_z}")  # debug
+        # print(f"Calibration Done. Gyro biases x={self.gyro_bias_x}, y={self.gyro_bias_y}, z={self.gyro_bias_z}")  # debug
 
 
 if __name__ == "__main__":
