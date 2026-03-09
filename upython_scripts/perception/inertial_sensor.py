@@ -1,4 +1,5 @@
 from machine import Pin, I2C
+from utime import sleep
 
 
 class MPU6050:
@@ -18,6 +19,11 @@ class MPU6050:
         self.ang_vel_x = 0.0
         self.ang_vel_y = 0.0
         self.ang_vel_z = 0.0
+        # Constant
+        self.gyro_bias_x = 0.0
+        self.gyro_bias_y = 0.0
+        self.gyro_bias_z = 0.0
+        self.calibrate_gyro()
 
     def read_data(self):
         """
@@ -54,9 +60,9 @@ class MPU6050:
         self.lin_acc_x = process_raw(data[0], 16384) * 9.80665
         self.lin_acc_y = process_raw(data[1], 16384) * 9.80665
         self.lin_acc_z = process_raw(data[2], 16384) * 9.80665
-        self.ang_vel_x = process_raw(data[4], 131)
-        self.ang_vel_y = process_raw(data[5], 131)
-        self.ang_vel_z = process_raw(data[6], 131)
+        self.ang_vel_x = process_raw(data[4], 131) - self.gyro_bias_x
+        self.ang_vel_y = process_raw(data[5], 131) - self.gyro_bias_y
+        self.ang_vel_z = process_raw(data[6], 131) - self.gyro_bias_z
 
         return {
             "acc_x": self.lin_acc_x,
@@ -66,6 +72,28 @@ class MPU6050:
             "omg_y": self.ang_vel_y,
             "omg_z": self.ang_vel_z,
         }
+
+    def calibrate_gyro(self, num_samples=1000):
+        """
+        One-time calibration
+        """
+        omg_x_deposite = 0.0
+        omg_y_deposite = 0.0
+        omg_z_deposite = 0.0
+        print("Calibrating Gyro... DO NOT MOVE ROBOT")  # debug
+        for i in range(num_samples):
+            data = self.read_data()
+            omg_x_deposite += data['omg_x']
+            omg_y_deposite += data['omg_y']
+            omg_z_deposite += data['omg_z']
+            # Small delay to let the sensor refresh
+            sleep(0.005)
+            if i % 50 == 0:  # debug
+                print(".", end="")
+        self.gyro_bias_x = omg_x_deposite / num_samples
+        self.gyro_bias_y = omg_y_deposite / num_samples
+        self.gyro_bias_z = omg_z_deposite / num_samples
+        print(f"Calibration Done. Gyro biases x={self.gyro_bias_x}, y={self.gyro_bias_y}, z={self.gyro_bias_z}")  # debug
 
 
 if __name__ == "__main__":
@@ -80,9 +108,9 @@ if __name__ == "__main__":
         data = sensor.read_data()
         # Logging, enable plotter
         # print(
-        #     f"acc(m/s/s): x={data['acc_x']:.4f}, acc_y={data['acc_y']:.4f}, acc_z={data['acc_z']:.4f}"
+        #     f"acc(m/s/s): x={data['acc_x']:.4f}, y={data['acc_y']:.4f}, z={data['acc_z']:.4f}"
         # )
         print(
-            f"angv(deg/s): x={data['omg_x']:.4f} deg/s, angv_y={data['omg_y']:.4f} deg/s, angv_z={data['omg_z']:.4f} deg/s"
+            f"angv(deg/s): x={data['omg_x']:.4f} deg/s, y={data['omg_y']:.4f} deg/s, z={data['omg_z']:.4f} deg/s"
         )
         sleep_ms(100)  # 10Hz
