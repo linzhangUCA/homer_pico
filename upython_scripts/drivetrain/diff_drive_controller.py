@@ -10,7 +10,7 @@ class DiffDriveController:
         self.right_wheel = RegulatedWheel(*right_wheel_ids)
         self.snooze()
         # Constants
-        self.wheel_sep = 0.223
+        self.wheel_sep = 0.213
 
     def awaken(self):
         self.left_wheel.awaken()

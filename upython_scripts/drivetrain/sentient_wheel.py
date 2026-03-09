@@ -7,7 +7,7 @@ class SentientWheel(EncodedMotor):
     def __init__(self, driver_ids: list | tuple, encoder_ids: list | tuple) -> None:
         super().__init__(driver_ids, encoder_ids)
         # Constants
-        self.wheel_radius = 0.0337  # m
+        self.wheel_radius = 0.0335  # m
         self.gear_ratio = 46.8512  # pololu 4805
         self.cpr = 48  # CPR = PPR * 4
         self.meas_freq = 100  # Hz
