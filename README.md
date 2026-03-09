@@ -7,7 +7,9 @@ MicroPython scripts on Raspberry Pi Pico (2) for HomeR's motion control.
     ```console
     sudo usermod -aG dialout $USER
     ```
-    Reboot computer.
+
+    > [!TIP]
+    > Reboot computer to gain access.
 
 1. Download and navigate to the repository.
 
@@ -29,11 +31,11 @@ MicroPython scripts on Raspberry Pi Pico (2) for HomeR's motion control.
     rshell -p /dev/ttyACM0 --buffer-size 512 cp upython_scripts/pico_messenger.py /pyboard/main.py
     ```
 
-    > [!tip]
+    > [!TIP]
     > A hard reset (unplug Pico then plug it back) is required to activate `main.py`.
 
 > [!NOTE]
-> If you are completely new to Pico or MicroPython, please follow the official [guide](https://projects.raspberrypi.org/en/projects/getting-started-with-the-pico/) to get familiar.
+> If you are completely new to Pico or MicroPython, please follow the official [guide](https://projects.raspberrypi.org/en/projects/getting-started-with-the-pico/) to get started.
 
 ## Test
 
