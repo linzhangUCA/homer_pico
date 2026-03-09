@@ -59,9 +59,9 @@ class MPU6050:
         self.ang_vel_z = process_raw(data[6], 131)
 
         return {
-            "xdd": self.lin_acc_x,
-            "ydd": self.lin_acc_y,
-            "zdd": self.lin_acc_z,
+            "acc_x": self.lin_acc_x,
+            "acc_y": self.lin_acc_y,
+            "acc_z": self.lin_acc_z,
             "omg_x": self.ang_vel_x,
             "omg_y": self.ang_vel_y,
             "omg_z": self.ang_vel_z,
@@ -80,7 +80,7 @@ if __name__ == "__main__":
         data = sensor.read_data()
         # Logging, enable plotter
         print(
-            f"acc(m/s/s): x={data['xdd']:.4f}, acc_y={data['ydd']:.4f}, acc_z={data['zdd']:.4f}"
+            f"acc(m/s/s): x={data['acc_x']:.4f}, acc_y={data['acc_y']:.4f}, acc_z={data['acc_z']:.4f}"
         )
         # print(
         #     f"angv(deg/s): x={data['omg_x']:.4f} deg/s, angv_y={data['omg_y']:.4f} deg/s, angv_z={data['omg_z']:.4f} deg/s"
