@@ -19,10 +19,11 @@ MicroPython scripts on Raspberry Pi Pico (2) for HomeR's motion control.
   cd homer_pico
   ```
 
-2. Upload differential drive controller
+2. Upload motion and perception controller 
 
   ```console
   rshell -p /dev/ttyACM0 --buffer-size 512 cp -r upython_scripts/drivetrain /pyboard/
+  rshell -p /dev/ttyACM0 --buffer-size 512 cp -r upython_scripts/perception /pyboard/
   ```
 
 3. Set up automatic communication using [`pico_messenger.py`](./upython_scripts/pico_messenger.py).
