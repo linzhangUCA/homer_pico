@@ -1,5 +1,6 @@
 from machine import Pin, I2C
 from utime import sleep
+from math import pi
 
 
 class MPU6050:
@@ -64,9 +65,9 @@ class MPU6050:
         self.lin_acc_x = process_raw(data[0], 16384) * 9.80665
         self.lin_acc_y = process_raw(data[1], 16384) * 9.80665
         self.lin_acc_z = process_raw(data[2], 16384) * 9.80665
-        self.ang_vel_x = process_raw(data[4], 131) - self.gyro_bias_x
-        self.ang_vel_y = process_raw(data[5], 131) - self.gyro_bias_y
-        self.ang_vel_z = process_raw(data[6], 131) - self.gyro_bias_z
+        self.ang_vel_x = (process_raw(data[4], 131) - self.gyro_bias_x) * pi / 180
+        self.ang_vel_y = (process_raw(data[5], 131) - self.gyro_bias_y) * pi / 180
+        self.ang_vel_z = (process_raw(data[6], 131) - self.gyro_bias_z) * pi / 180
 
         return {
             "acc_x": self.lin_acc_x,
@@ -115,6 +116,6 @@ if __name__ == "__main__":
         #     f"acc(m/s/s): x={data['acc_x']:.4f}, y={data['acc_y']:.4f}, z={data['acc_z']:.4f}"
         # )
         print(
-            f"angv(deg/s): x={data['omg_x']:.4f} deg/s, y={data['omg_y']:.4f} deg/s, z={data['omg_z']:.4f} deg/s"
+            f"angv(deg/s): x={data['omg_x']:.4f} rad/s, y={data['omg_y']:.4f} rad/s, z={data['omg_z']:.4f} rad/s"
         )
         sleep_ms(100)  # 10Hz
