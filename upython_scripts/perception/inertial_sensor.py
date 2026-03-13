@@ -65,9 +65,9 @@ class MPU6050:
         self.lin_acc_x = process_raw(data[0], 16384) * 9.80665
         self.lin_acc_y = process_raw(data[1], 16384) * 9.80665
         self.lin_acc_z = process_raw(data[2], 16384) * 9.80665
-        self.ang_vel_x = (process_raw(data[4], 131) - self.gyro_bias_x) * pi / 180
-        self.ang_vel_y = (process_raw(data[5], 131) - self.gyro_bias_y) * pi / 180
-        self.ang_vel_z = (process_raw(data[6], 131) - self.gyro_bias_z) * pi / 180
+        self.ang_vel_x = process_raw(data[4], 131) * pi / 180 - self.gyro_bias_x
+        self.ang_vel_y = process_raw(data[5], 131) * pi / 180 - self.gyro_bias_y
+        self.ang_vel_z = process_raw(data[6], 131) * pi / 180 - self.gyro_bias_z
 
         return {
             "acc_x": self.lin_acc_x,
