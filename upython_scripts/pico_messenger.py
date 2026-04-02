@@ -46,6 +46,9 @@ while True:
         in_msg = sys.stdin.readline().strip()  # take out whitespaces
         targ_vels = in_msg.split(",")  # get a list
         if len(targ_vels) == 2:
-            targ_lin_vel = float(targ_vels[0])
-            targ_ang_vel = float(targ_vels[1])
-            mobile_base.set_vels(targ_lin_vel, targ_ang_vel)
+            try:
+                targ_lin_vel = float(targ_vels[0])
+                targ_ang_vel = float(targ_vels[1])
+                mobile_base.set_vels(targ_lin_vel, targ_ang_vel)
+            except ValueError:
+                pass
